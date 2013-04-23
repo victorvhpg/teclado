@@ -44,7 +44,6 @@ var teclado = (function(window) {
                             return true;
                         }
                     } else {
-                        tempoDaTeclaAnterior = Date.now();
                         //nao achou a partir de 'posInicioDaProcura'
                         //entao sai do laco e comeca a busca a partir de posInicioDaProcura+1
                         break;
@@ -54,6 +53,7 @@ var teclado = (function(window) {
                 //satisfaz a sequencia procurada entao tenta a partir de +1 da ultima 
                 //tentativa de busca (posInicioDaProcura)
                 i = posInicioDaProcura + 1;
+                tempoDaTeclaAnterior = Date.now();
             }
             return false;
         },
