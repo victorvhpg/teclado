@@ -5,14 +5,20 @@ var teclado = (function(window) {
     var Date = window.Date;
     var document = window.document;
     var _vetSequencia = [];
+    var _teclas = {
+        ENTER: 13,
+        ESPACO: 32,
+        ESQUERDA: 37,
+        CIMA: 38,
+        DIREITA: 39,
+        BAIXO: 40,
+        A: 65,
+        D: 68,
+        S: 83,
+        W: 87
+    };
     var teclado = {
-        teclas: {
-            ESQUERDA: 37,
-            CIMA: 38,
-            DIREITA: 39,
-            BAIXO: 40,
-            ESPACO: 32
-        },
+        teclas: _teclas,
         teclasPressionadas: {},
         estaPressionada: function(keyCode) {
             return this.teclasPressionadas[keyCode];
@@ -25,13 +31,13 @@ var teclado = (function(window) {
                     tecla;
             //percorre todas as teclas que ja foram apertadas
             while (i < l) {
-                //contador de teclas  que foram apertadas em sequencia
+//contador de teclas  que foram apertadas em sequencia
                 contSeqProcura = 0;
                 //posicao que iniciou a busca da sequencia
                 posInicioDaProcura = i;
                 //para cada tecla apertada verifica  se esta na sequencia procurada
                 do {
-                    tecla = _vetSequencia[i];//tecla que ja foi apertada
+                    tecla = _vetSequencia[i]; //tecla que ja foi apertada
                     //verifica se a tecla apertada satisfaz a da sequencia atual 
                     //no tempo tempoMaximoEntreCadaSequencia
                     if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura]
@@ -44,8 +50,8 @@ var teclado = (function(window) {
                             return true;
                         }
                     } else {
-                        //nao achou a partir de 'posInicioDaProcura'
-                        //entao sai do laco e comeca a busca a partir de posInicioDaProcura+1
+//nao achou a partir de 'posInicioDaProcura'
+//entao sai do laco e comeca a busca a partir de posInicioDaProcura+1
                         break;
                     }
                 } while (i < l);
@@ -61,7 +67,6 @@ var teclado = (function(window) {
         ///e o intervalo de tempo entre  cada tecla apertada nao deve se maior 
         // que 'tempoMaximoEntreCadaSequencia' e o tempo decorrido desde
         //  a ultima tecla pressionada nao pode ser maior  q tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora
-        //por exemplo  verifica se o usuario pressionou a sequencia do HADOUKEN
         pressionouSequencia: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaSequencia, tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
                     contSeqProcura = 0,
@@ -72,7 +77,7 @@ var teclado = (function(window) {
                 return false;
             }
             for (var i = (l - totalSequenciaProcura); i < l; i++) {
-                tecla = _vetSequencia[i];//tecla que ja foi apertada				
+                tecla = _vetSequencia[i]; //tecla que ja foi apertada				
                 if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura]
                         && ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaSequencia)) {
                     contSeqProcura++;
