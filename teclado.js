@@ -64,9 +64,9 @@ var teclado = (function(window) {
             return false;
         },
         //verifica se o usuario pressionou uma sequencia de teclas 
-        ///e o intervalo de tempo entre  cada tecla apertada nao deve se maior 
-        // que 'tempoMaximoEntreCadaSequencia' e o tempo decorrido desde
-        //  a ultima tecla pressionada nao pode ser maior  q tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora
+        //e o intervalo de tempo entre  cada tecla apertada nao deve se maior 
+        //que 'tempoMaximoEntreCadaSequencia' e o tempo decorrido desde
+        //a ultima tecla pressionada nao pode ser maior  q tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora
         pressionouSequencia: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaSequencia, tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
                     contSeqProcura = 0,
