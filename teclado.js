@@ -2,7 +2,6 @@
 //https://github.com/victorvhpg/teclado/blob/master/teclado.js
 var teclado = (function(window) {
     "use strict";
-    var Date = window.Date;
     var document = window.document;
     var _vetSequencia = [];
     var _teclas = {
