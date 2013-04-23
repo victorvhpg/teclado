@@ -24,11 +24,10 @@ var teclado = (function(window) {
             return this.teclasPressionadas[keyCode];
         },
         //verifica se ja apertou a sequencia em algum momento
-        pressionouSequenciaEmAlgumMomento: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaSequencia) {
+        pressionouSequenciaEmAlgumMomento: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaTecla) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
                     i = 0, l = _vetSequencia.length, contSeqProcura, posInicioDaProcura,
-                    tempoDaTeclaAnterior = Date.now(),
-                    tecla;
+                    tempoDaTeclaAnterior = Date.now(), tecla;
             //percorre todas as teclas que ja foram apertadas
             while (i < l) {
                 //contador de teclas  que foram apertadas em sequencia
@@ -41,7 +40,7 @@ var teclado = (function(window) {
                     //verifica se a tecla apertada satisfaz a da sequencia atual 
                     //no tempo tempoMaximoEntreCadaSequencia
                     if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura]
-                            && ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaSequencia)) {
+                            && ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaTecla)) {
                         tempoDaTeclaAnterior = tecla.tempoQuandoApertou;
                         contSeqProcura++;
                         i++;
@@ -65,13 +64,11 @@ var teclado = (function(window) {
         },
         //verifica se o usuario pressionou uma sequencia de teclas 
         //e o intervalo de tempo entre  cada tecla apertada nao deve se maior 
-        //que 'tempoMaximoEntreCadaSequencia' e o tempo decorrido desde
-        //a ultima tecla pressionada nao pode ser maior  q tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora
-        pressionouSequencia: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaSequencia, tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora) {
+        //que 'tempoMaximoEntreCadaTecla' e o tempo decorrido desde
+        // a ultima tecla pressionada nao pode ser maior  q tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora
+        pressionouSequencia: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaTecla, tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
-                    contSeqProcura = 0,
-                    tecla,
-                    l = _vetSequencia.length,
+                    contSeqProcura = 0, tecla, l = _vetSequencia.length,
                     tempoDaTeclaAnterior = Date.now();
             if (totalSequenciaProcura > _vetSequencia.length || totalSequenciaProcura === 0) {
                 return false;
@@ -79,7 +76,7 @@ var teclado = (function(window) {
             for (var i = (l - totalSequenciaProcura); i < l; i++) {
                 tecla = _vetSequencia[i]; //tecla que ja foi apertada				
                 if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura]
-                        && ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaSequencia)) {
+                        && ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaTecla)) {
                     contSeqProcura++;
                     tempoDaTeclaAnterior = tecla.tempoQuandoApertou;
                 } else {
