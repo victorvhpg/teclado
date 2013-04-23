@@ -6,6 +6,8 @@ var teclado = (function(window) {
     var _vetSequencia = [];
     var _teclas = {
         ENTER: 13,
+        SHIFT: 16,
+        CTRL: 17,
         ESPACO: 32,
         ESQUERDA: 37,
         CIMA: 38,
@@ -23,6 +25,8 @@ var teclado = (function(window) {
             return this.teclasPressionadas[keyCode];
         },
         //verifica se ja apertou a sequencia em algum momento
+        //vetSequenciaTeclasProcura array de teclas que formam a sequencia 
+        //tempoMaximoEntreCadaTecla limite de tempo entre cada tecla pressionada
         pressionouSequenciaEmAlgumMomento: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaTecla) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
                     i = 0, l = _vetSequencia.length, contSeqProcura, posInicioDaProcura,
@@ -68,7 +72,7 @@ var teclado = (function(window) {
         pressionouSequencia: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaTecla, tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
                     contSeqProcura = 0, tecla, l = _vetSequencia.length,
-                    tempoDaTeclaAnterior = Date.now();
+                    agora, tempoDecorridoDaUltimaTecla, tempoDaTeclaAnterior = Date.now();
             if (totalSequenciaProcura > _vetSequencia.length || totalSequenciaProcura === 0) {
                 return false;
             }
@@ -83,9 +87,9 @@ var teclado = (function(window) {
                 }
             }
             if (contSeqProcura > 0 && contSeqProcura === totalSequenciaProcura) {
-                var agora = Date.now();
-                var tempoDecorridaDaUltimaTecla = agora - _vetSequencia[ l - 1 ].tempoQuandoApertou;
-                return  (tempoDecorridaDaUltimaTecla <= tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora);
+                agora = Date.now();
+                tempoDecorridoDaUltimaTecla = agora - _vetSequencia[ l - 1 ].tempoQuandoApertou;
+                return  (tempoDecorridoDaUltimaTecla <= tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora);
             }
             return false;
         },
