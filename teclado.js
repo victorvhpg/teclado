@@ -31,7 +31,7 @@ var teclado = (function(window) {
                     tecla;
             //percorre todas as teclas que ja foram apertadas
             while (i < l) {
-//contador de teclas  que foram apertadas em sequencia
+                //contador de teclas  que foram apertadas em sequencia
                 contSeqProcura = 0;
                 //posicao que iniciou a busca da sequencia
                 posInicioDaProcura = i;
@@ -50,8 +50,8 @@ var teclado = (function(window) {
                             return true;
                         }
                     } else {
-//nao achou a partir de 'posInicioDaProcura'
-//entao sai do laco e comeca a busca a partir de posInicioDaProcura+1
+                        //nao achou a partir de 'posInicioDaProcura'
+                        //entao sai do laco e comeca a busca a partir de posInicioDaProcura+1
                         break;
                     }
                 } while (i < l);
