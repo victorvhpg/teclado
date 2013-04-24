@@ -22,7 +22,7 @@ var teclado = (function(window) {
         teclas: _teclas,
         teclasPressionadas: {},
         estaPressionada: function(keyCode) {
-            return this.teclasPressionadas[keyCode];
+            return this.teclasPressionadas[keyCode].pressionada;
         },
         //verifica se ja apertou a sequencia em algum momento
         //vetSequenciaTeclasProcura array de teclas que formam a sequencia 
@@ -93,18 +93,36 @@ var teclado = (function(window) {
             }
             return false;
         },
+        //retona qual das teclas foi pressionada antes 
+        getTeclaPressionadaQueFoiPressionadaAntes: function(vetTeclasPressionadas) {
+            var posMenor = 0, t = this.teclasPressionadas;
+            for (var i = 0, l = vetTeclasPressionadas.length; i < l; i++) {
+                //encontrar o menor
+                if (t[vetTeclasPressionadas[i]].tempoQuandoApertou < t[vetTeclasPressionadas[posMenor]].tempoQuandoApertou) {
+                    posMenor = i;
+                }
+            }
+            return  vetTeclasPressionadas[posMenor];
+        },
         pressionaTecla: function(keyCode) {
             if (this.estaPressionada(keyCode)) {
                 return;
             }
+            var agora = Date.now();
+            this.teclasPressionadas[keyCode] = {
+                pressionada: true,
+                tempoQuandoApertou: agora
+            };
             _vetSequencia.push({
                 keyCode: keyCode,
-                tempoQuandoApertou: Date.now()
+                tempoQuandoApertou: agora
             });
-            this.teclasPressionadas[keyCode] = true;
         },
         soltaTecla: function(keyCode) {
-            this.teclasPressionadas[keyCode] = false;
+            this.teclasPressionadas[keyCode] = {
+                pressionada: false,
+                tempoQuandoApertou: 0
+            };
         },
         isTeclaValida: function(keyCode) {
             for (var i in this.teclas) {
@@ -117,7 +135,10 @@ var teclado = (function(window) {
         init: function() {
             var that = this;
             for (var i in this.teclas) {
-                this.teclasPressionadas[this.teclas[i]] = false;
+                this.teclasPressionadas[this.teclas[i]] = {
+                    pressionada: false,
+                    tempoQuandoApertou: 0
+                };
             }
             document.addEventListener("keydown", function(e) {
                 var keyCode = e.which;
