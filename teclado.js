@@ -26,15 +26,23 @@ var Teclado = (function(window) {
         constructor: Teclado,
         teclasPressionadas: {},
         estaPressionada: function(keyCode) {
-            return this.teclasPressionadas[keyCode].pressionada;
+            return this.teclasPressionadas[keyCode].pressionada && !this.teclasPressionadas[keyCode].naoPodePressionarAteSoltar;
+        },
+        desabilitaAteSoltar: function(keyCode) {
+            this.soltaTecla(keyCode);
+            this.teclasPressionadas[keyCode].naoPodePressionarAteSoltar = true;
         },
         //verifica se ja apertou a sequencia em algum momento
-        //vetSequenciaTeclasProcura array de teclas que formam a sequencia 
+        //vetSequenciaTeclasProcura array de teclas que formam a sequencia
         //tempoMaximoEntreCadaTecla limite de tempo entre cada tecla pressionada
         pressionouSequenciaEmAlgumMomento: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaTecla) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
-                    i = 0, l = this.vetSequencia.length, contSeqProcura, posInicioDaProcura,
-                    tempoDaTeclaAnterior = Date.now(), tecla;
+                    i = 0,
+                    l = this.vetSequencia.length,
+                    contSeqProcura,
+                    posInicioDaProcura,
+                    tempoDaTeclaAnterior = Date.now(),
+                    tecla;
             //percorre todas as teclas que ja foram apertadas
             while (i < l) {
                 //contador de teclas  que foram apertadas em sequencia
@@ -44,10 +52,10 @@ var Teclado = (function(window) {
                 //para cada tecla apertada verifica  se esta na sequencia procurada
                 do {
                     tecla = this.vetSequencia[i]; //tecla que ja foi apertada
-                    //verifica se a tecla apertada satisfaz a da sequencia atual 
+                    //verifica se a tecla apertada satisfaz a da sequencia atual
                     //no tempo tempoMaximoEntreCadaSequencia
-                    if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura]
-                            && ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaTecla)) {
+                    if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura] &&
+                            ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaTecla)) {
                         tempoDaTeclaAnterior = tecla.tempoQuandoApertou;
                         contSeqProcura++;
                         i++;
@@ -61,29 +69,33 @@ var Teclado = (function(window) {
                         break;
                     }
                 } while (i < l);
-                //se passar aqui eh que a sequencia a partir de posInicioDaProcura nao 
-                //satisfaz a sequencia procurada entao tenta a partir de +1 da ultima 
+                //se passar aqui eh que a sequencia a partir de posInicioDaProcura nao
+                //satisfaz a sequencia procurada entao tenta a partir de +1 da ultima
                 //tentativa de busca (posInicioDaProcura)
                 i = posInicioDaProcura + 1;
                 tempoDaTeclaAnterior = Date.now();
             }
             return false;
         },
-        //verifica se o usuario pressionou uma sequencia de teclas 
-        //e o intervalo de tempo entre  cada tecla apertada nao deve se maior 
+        //verifica se o usuario pressionou uma sequencia de teclas
+        //e o intervalo de tempo entre  cada tecla apertada nao deve se maior
         //que 'tempoMaximoEntreCadaTecla' e o tempo decorrido desde
         // a ultima tecla pressionada nao pode ser maior  q tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora
         pressionouSequencia: function(vetSequenciaTeclasProcura, tempoMaximoEntreCadaTecla, tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora) {
             var totalSequenciaProcura = vetSequenciaTeclasProcura.length,
-                    contSeqProcura = 0, tecla, l = this.vetSequencia.length,
-                    agora, tempoDecorridoDaUltimaTecla, tempoDaTeclaAnterior = Date.now();
+                    contSeqProcura = 0,
+                    tecla,
+                    l = this.vetSequencia.length,
+                    agora,
+                    tempoDecorridoDaUltimaTecla,
+                    tempoDaTeclaAnterior = Date.now();
             if (totalSequenciaProcura > this.vetSequencia.length || totalSequenciaProcura === 0) {
                 return false;
             }
             for (var i = (l - totalSequenciaProcura); i < l; i++) {
-                tecla = this.vetSequencia[i]; //tecla que ja foi apertada				
-                if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura]
-                        && ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaTecla)) {
+                tecla = this.vetSequencia[i]; //tecla que ja foi apertada
+                if (tecla.keyCode === vetSequenciaTeclasProcura[contSeqProcura] &&
+                        ((tecla.tempoQuandoApertou - tempoDaTeclaAnterior) <= tempoMaximoEntreCadaTecla)) {
                     contSeqProcura++;
                     tempoDaTeclaAnterior = tecla.tempoQuandoApertou;
                 } else {
@@ -92,21 +104,22 @@ var Teclado = (function(window) {
             }
             if (contSeqProcura > 0 && contSeqProcura === totalSequenciaProcura) {
                 agora = Date.now();
-                tempoDecorridoDaUltimaTecla = agora - this.vetSequencia[ l - 1 ].tempoQuandoApertou;
-                return  (tempoDecorridoDaUltimaTecla <= tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora);
+                tempoDecorridoDaUltimaTecla = agora - this.vetSequencia[l - 1].tempoQuandoApertou;
+                return (tempoDecorridoDaUltimaTecla <= tempoMaximoDecorridoDaUltimaTeclaEmRelacaoAgora);
             }
             return false;
         },
-        //retona qual das teclas foi pressionada antes 
+        //retona qual das teclas foi pressionada antes
         getTeclaPressionadaQueFoiPressionadaAntes: function(vetTeclasPressionadas) {
-            var posMenor = 0, t = this.teclasPressionadas;
+            var posMenor = 0,
+                    t = this.teclasPressionadas;
             for (var i = 0, l = vetTeclasPressionadas.length; i < l; i++) {
                 //encontrar o menor
                 if (t[vetTeclasPressionadas[i]].tempoQuandoApertou < t[vetTeclasPressionadas[posMenor]].tempoQuandoApertou) {
                     posMenor = i;
                 }
             }
-            return  vetTeclasPressionadas[posMenor];
+            return vetTeclasPressionadas[posMenor];
         },
         pressionaTecla: function(keyCode) {
             if (this.estaPressionada(keyCode)) {
@@ -115,6 +128,8 @@ var Teclado = (function(window) {
             var agora = Date.now();
             this.teclasPressionadas[keyCode] = {
                 pressionada: true,
+                soltou: false,
+                naoPodePressionarAteSoltar: false,
                 tempoQuandoApertou: agora
             };
             this.vetSequencia.push({
@@ -125,6 +140,8 @@ var Teclado = (function(window) {
         soltaTecla: function(keyCode) {
             this.teclasPressionadas[keyCode] = {
                 pressionada: false,
+                soltou: true,
+                naoPodePressionarAteSoltar: false,
                 tempoQuandoApertou: 0
             };
         },
@@ -145,8 +162,11 @@ var Teclado = (function(window) {
                 };
             }
             document.addEventListener("keydown", function(e) {
+
                 var keyCode = e.which;
-                if (that.isTeclaValida(keyCode)) {
+                if (that.isTeclaValida(keyCode) &&
+                        !that.teclasPressionadas[keyCode].naoPodePressionarAteSoltar
+                        ) {
                     that.pressionaTecla(e.which);
                     e.preventDefault();
                 }
@@ -158,6 +178,8 @@ var Teclado = (function(window) {
                     e.preventDefault();
                 }
             });
-        }};
+        }
+    };
     return Teclado;
-}(window));
+}
+(window));
